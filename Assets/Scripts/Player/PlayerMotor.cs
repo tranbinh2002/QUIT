@@ -12,10 +12,9 @@ public class PlayerMotor : MonoBehaviour
     Vector3 currentMoveDirection;
     float jumpHeight = 0.5f;
 
-    public void SetUp(float playerVelocity, float playerJumpHeight)
+    public void SetUp(float playerVelocity)
     {
         velocity = playerVelocity;
-        jumpHeight = playerJumpHeight;
     }
 
     private void Start()
@@ -29,7 +28,7 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         MoveHandle();
-        JumpHandle();
+        JumpInputHandle();
     }
 
     void MoveHandle()
@@ -53,16 +52,14 @@ public class PlayerMotor : MonoBehaviour
     Vector3 JumpMotion()
     {
         float h = jumpHeight - transform.position.y;
-        Debug.Log(h);
-        if (h - safeValue <= 0)
+        if (h < safeValue)
         {
             currentJumpDirection = -1;
-            Debug.Log("Change Jump Dir");
         }
         return currentJumpDirection * Time.deltaTime * Mathf.Sqrt(2 * GRAVITY * Mathf.Abs(h)) * Vector3.up;
     }
 
-    void JumpHandle()
+    void JumpInputHandle()
     {
         if (isJumping && controller.isGrounded)
         {
@@ -73,7 +70,6 @@ public class PlayerMotor : MonoBehaviour
         if (!isJumping && Input.GetKeyDown(KeyCode.Space))
         {
             isJumping = true;
-            Debug.Log("Space");
         }
     }
 }
