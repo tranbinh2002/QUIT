@@ -6,7 +6,7 @@ public interface IPatrolData
     int currentPositionIndex { get; set; }
 }
 
-public class EnemyData
+public class EnemyData : IPatrolData
 {
     Vector3[] patrolPositions;
 
@@ -14,6 +14,11 @@ public class EnemyData
     {
         TakePointsOnRoute(route);
     }
+
+    public Vector3[] patrolRoute => patrolPositions;
+
+    public int currentPositionIndex { get; set; } = 0;
+
     void TakePointsOnRoute(GameObject route)
     {
         Transform[] points = route.GetComponentsInChildren<Transform>();

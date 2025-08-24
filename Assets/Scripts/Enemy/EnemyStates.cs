@@ -20,7 +20,7 @@ public abstract class EnemyState
 public class EnemyPatrolState : EnemyState
 {
     IPatrolData data;
-
+    EnemyConfig config;
     public EnemyPatrolState(EnemyStateController stateController, CharacterController enemyMotor) : base(stateController, enemyMotor)
     {
     }
@@ -32,19 +32,60 @@ public class EnemyPatrolState : EnemyState
 
     public override void SetConfig<T>(T config)
     {
-        throw new System.NotImplementedException();
+        this.config = config as EnemyConfig;
     }
 
+    Vector3 currentDirection;
+    Vector3 currentVelocity;
     public override void Enter()
     {
-        //lấy điểm đích
+        UpdateCurrentVelocity();
     }
 
     public override void Execute()
     {
+        motor.SimpleMove(currentVelocity);
+        Vector3 newDir = CurrentDirection();
+        if (Vector3.Dot(newDir, currentDirection) < 0)
+        {
+            SetNextPositionIndex();
+            UpdateCurrentVelocity();
+        }
         //di chuyển -> chase
+    }
 
-        //motor.SimpleMove();
+    void UpdateCurrentVelocity()
+    {
+        currentDirection = CurrentDirection();
+        currentVelocity = config.moveSpeed * currentDirection;
+    }
+    Vector3 CurrentDirection()
+    {
+        Vector3 result = Vector3.Normalize(data.patrolRoute[data.currentPositionIndex] - motor.transform.position);
+        result.y = 0;
+        return result;
+    }
+
+    bool forwardIterating = true;
+    public void SetNextPositionIndex()
+    {
+        if (forwardIterating && data.currentPositionIndex == data.patrolRoute.Length - 1)
+        {
+            forwardIterating = false;
+        }
+        if (!forwardIterating && data.currentPositionIndex == 0)
+        {
+            forwardIterating = true;
+        }
+
+        if (forwardIterating)
+        {
+            data.currentPositionIndex++;
+        }
+        else
+        {
+            data.currentPositionIndex--;
+        }
     }
 
     public override void Exit()
