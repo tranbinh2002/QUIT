@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 
-public class PlayerMotor : MonoBehaviour
+public interface IHaveMoveDirection
+{
+    Vector3 direction { get; }
+}
+
+public class PlayerMotor : MonoBehaviour, IHaveMoveDirection
 {
     [SerializeField]
     CharacterController controller;
@@ -11,6 +16,8 @@ public class PlayerMotor : MonoBehaviour
     float velocity = 5f;
     Vector3 currentMoveDirection;
     float jumpHeight = 0.5f;
+
+    public Vector3 direction => currentMoveDirection;
 
     public void Constructor(float playerVelocity)
     {

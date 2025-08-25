@@ -15,6 +15,7 @@ public class EnemyStateController
             { EnemyStateName.Chase, new EnemyChaseState(this, enemyMotor) },
             { EnemyStateName.Back, new EnemyBackState(this, enemyMotor) }
         };
+        //setdata, setconfig
 
         currentState = enemyStates[firstState];
         currentState.Enter();

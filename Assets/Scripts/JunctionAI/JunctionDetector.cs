@@ -15,7 +15,7 @@ public class JunctionDetector : MonoBehaviour
 
     void Start()
     {
-        JunctionDetectorFactory.Instance.Register(GetComponent<Collider>(), this);
+        JunctionDetectorLocator.Instance.Register(GetComponent<Collider>(), this);
 
         inSightJunctionSet = new HashSet<Collider>(inSightJunctions);
     }
