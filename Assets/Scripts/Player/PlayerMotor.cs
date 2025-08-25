@@ -12,7 +12,7 @@ public class PlayerMotor : MonoBehaviour
     Vector3 currentMoveDirection;
     float jumpHeight = 0.5f;
 
-    public void SetUp(float playerVelocity)
+    public void Constructor(float playerVelocity)
     {
         velocity = playerVelocity;
     }

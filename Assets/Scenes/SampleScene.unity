@@ -700,7 +700,6 @@ GameObject:
   m_Component:
   - component: {fileID: 77396951}
   - component: {fileID: 77396952}
-  - component: {fileID: 77396953}
   m_Layer: 0
   m_Name: New Game Object
   m_TagString: Untagged
@@ -744,26 +743,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &77396953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 77396950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbc79ba6b365ee0409cd239248670c84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player:
-    serializedVersion: 2
-    m_Bits: 8
-  enemy:
-    serializedVersion: 2
-    m_Bits: 64
-  watchJunctions: []
-  junctionParent: {fileID: 1742896245}
 --- !u!1 &117596517
 GameObject:
   m_ObjectHideFlags: 0

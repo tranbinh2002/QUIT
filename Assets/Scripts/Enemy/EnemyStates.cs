@@ -42,18 +42,6 @@ public class EnemyPatrolState : EnemyState
         UpdateCurrentVelocity();
     }
 
-    public override void Execute()
-    {
-        motor.SimpleMove(currentVelocity);
-        Vector3 newDir = CurrentDirection();
-        if (Vector3.Dot(newDir, currentDirection) < 0)
-        {
-            SetNextPositionIndex();
-            UpdateCurrentVelocity();
-        }
-        //di chuyển -> chase
-    }
-
     void UpdateCurrentVelocity()
     {
         currentDirection = CurrentDirection();
@@ -64,6 +52,18 @@ public class EnemyPatrolState : EnemyState
         Vector3 result = Vector3.Normalize(data.patrolRoute[data.currentPositionIndex] - motor.transform.position);
         result.y = 0;
         return result;
+    }
+
+    public override void Execute()
+    {
+        motor.SimpleMove(currentVelocity);
+        Vector3 newDir = CurrentDirection();
+        if (Vector3.Dot(newDir, currentDirection) < 0)
+        {
+            SetNextPositionIndex();
+            UpdateCurrentVelocity();
+        }
+        //di chuyển -> chase
     }
 
     bool forwardIterating = true;
