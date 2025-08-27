@@ -5,13 +5,14 @@ public abstract class EnemyState
     protected EnemyStateController stateController;
     protected CharacterController motor;
 
-    public EnemyState(EnemyStateController stateController, CharacterController enemyMotor)
+    protected EnemyConfig config;
+    public EnemyState(EnemyStateController stateController, CharacterController enemyMotor, EnemyConfig config)
     {
         this.stateController = stateController;
         motor = enemyMotor;
+        this.config = config;
     }
     public abstract void SetData<T>(T data);
-    public abstract void SetConfig<T>(T config);
     public abstract void Enter();
     public abstract void Execute();
     public abstract void Exit();

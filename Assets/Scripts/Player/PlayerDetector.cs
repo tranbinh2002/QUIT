@@ -6,11 +6,11 @@ public class PlayerDetector : MonoBehaviour
     LayerMask junctionMask;
 
     IHaveMoveDirection motor;
-    JunctionData junction;
+    JunctionData junctionData;
     float junctionDetectDistance;
     public void Constructor(JunctionData junctionData, float junctionDetectDistance)
     {
-        junction = junctionData;
+        this.junctionData = junctionData;
         this.junctionDetectDistance = junctionDetectDistance;
     }
 
@@ -23,7 +23,7 @@ public class PlayerDetector : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, motor.direction, out RaycastHit hit, junctionDetectDistance, junctionMask, QueryTriggerInteraction.Collide))
         {
-            junction.containPlayerJunction = hit.collider;
+            junctionData.containPlayerJunction = hit.collider;
         }
     }
 }

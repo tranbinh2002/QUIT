@@ -1,38 +1,60 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPatrolData
+public interface IPlayerDetectable
 {
-    Transform patroller { get; }
+    bool PlayerIsInSight(Vector3 origin, Vector3 direction, float maxDistance, out bool reachJunction);
+}
+
+public interface IPatrolData : IPlayerDetectable
+{
     Vector3[] patrolRoute { get; }
     int currentPositionIndex { get; set; }
-
-    LayerMask junctionMask { get; }
 }
 
-public interface IChaseData
+public interface IChaseData : IPlayerDetectable
 {
     JunctionData junctionData { get; }
-    List<Vector3> trackRoute { get; }
+    List<Collider> trackChaseRoute { get; }
 }
 
-public class EnemyData : IPatrolData
+public class EnemyData : IPatrolData, IChaseData
 {
-    Transform enemy;
     Vector3[] patrolPositions;
-    LayerMask _junctionMask;
+    LayerMask junctionMask;
 
-    public EnemyData(Transform enemy, GameObject route, LayerMask junctionMask)
+    JunctionData _junctionData;
+    List<Collider> trackChasePoints;
+
+    public EnemyData(GameObject patrolRoute, JunctionData junctionData, LayerMask junctionMask)
     {
-        this.enemy = enemy;
-        TakePointsOnRoute(route);
-        _junctionMask = junctionMask;
+        TakePointsOnRoute(patrolRoute);
+        this.junctionMask = junctionMask;
+
+        _junctionData = junctionData;
+        trackChasePoints = new List<Collider>();
     }
 
-    public Transform patroller => enemy;
     public Vector3[] patrolRoute => patrolPositions;
     public int currentPositionIndex { get; set; } = 0;
-    public LayerMask junctionMask => _junctionMask;
+
+    public JunctionData junctionData => _junctionData;
+    public List<Collider> trackChaseRoute => trackChasePoints;
+
+    public bool PlayerIsInSight(Vector3 origin, Vector3 direction, float maxDistance, out bool reachJunction)
+    {
+        reachJunction = false;
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, maxDistance, junctionMask, QueryTriggerInteraction.Collide))
+        {
+            reachJunction = true;
+            if (JunctionDetectorLocator.Instance.GetJunctionDetector(hit.collider).PlayerIsInSight())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     void TakePointsOnRoute(GameObject route)
     {
@@ -43,6 +65,5 @@ public class EnemyData : IPatrolData
             patrolPositions[i] = points[i].position;
         }
     }
-
 
 }

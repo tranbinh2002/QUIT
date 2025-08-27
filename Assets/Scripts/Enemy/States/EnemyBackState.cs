@@ -2,16 +2,11 @@
 
 public class EnemyBackState : EnemyState
 {
-    public EnemyBackState(EnemyStateController stateController, CharacterController enemyMotor) : base(stateController, enemyMotor)
+    public EnemyBackState(EnemyStateController stateController, CharacterController enemyMotor, EnemyConfig config) : base(stateController, enemyMotor, config)
     {
     }
 
     public override void SetData<T>(T data)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void SetConfig<T>(T config)
     {
         throw new System.NotImplementedException();
     }
@@ -28,6 +23,6 @@ public class EnemyBackState : EnemyState
 
     public override void Exit()
     {
-        //patrol hoac game over
+        //XOA DANH SACH TRACK
     }
 }

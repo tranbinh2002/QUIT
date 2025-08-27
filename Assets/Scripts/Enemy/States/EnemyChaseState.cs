@@ -1,34 +1,72 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyChaseState : EnemyState
 {
-    public EnemyChaseState(EnemyStateController stateController, CharacterController enemyMotor) : base(stateController, enemyMotor)
+    IChaseData data;
+    HashSet<Collider> trackColliderOnRoute;
+    public EnemyChaseState(EnemyStateController stateController, CharacterController enemyMotor, EnemyConfig config) : base(stateController, enemyMotor, config)
     {
-        
+        trackColliderOnRoute = new HashSet<Collider>();
     }
 
     public override void SetData<T>(T data)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public override void SetConfig<T>(T config)
-    {
-        throw new System.NotImplementedException();
+        this.data = data as IChaseData;
     }
 
     public override void Enter()
     {
-        //ghi lai diem bat dau
+        TrackRoute();
+    }
+    
+    void TrackRoute()
+    {
+        data.trackChaseRoute.Add(data.junctionData.containPlayerJunction);
+        trackColliderOnRoute.Add(data.junctionData.containPlayerJunction);
     }
 
     public override void Execute()
     {
-        //raycasts, ghi lai duong ve -> patrol
+        Vector3 moveDirection = Vector3.Normalize(data.trackChaseRoute[data.trackChaseRoute.Count - 1].transform.position - motor.transform.position);
+        moveDirection.y = 0;
+        if (data.PlayerIsInSight(motor.transform.position, moveDirection, config.junctionDetectDistance, out bool reachJunction))
+        {
+            motor.SimpleMove(config.moveSpeed * moveDirection);
+            TrackRouteOnChasing();
+        }
+        else if (reachJunction)
+        {
+            stateController.ChangeState(EnemyStateName.Back);
+        }
+    }
+
+    void TrackRouteOnChasing()
+    {
+        if (trackColliderOnRoute.Contains(data.junctionData.containPlayerJunction))
+        {
+            RemoveRedundancy();
+        }
+        else
+        {
+            TrackRoute();
+        }
+    }
+    void RemoveRedundancy()
+    {
+        for (int i = data.trackChaseRoute.Count - 1; i >= 0; i--)
+        {
+            if (data.trackChaseRoute[i] == data.junctionData.containPlayerJunction)
+            {
+                return;
+            }
+            data.trackChaseRoute.RemoveAt(i);
+        }
     }
 
     public override void Exit()
     {
-        //KHONG xoa danh sach duong ve
+        trackColliderOnRoute.Clear();
     }
 }

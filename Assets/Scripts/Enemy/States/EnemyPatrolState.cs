@@ -3,19 +3,13 @@ using UnityEngine;
 public class EnemyPatrolState : EnemyState
 {
     IPatrolData data;
-    EnemyConfig config;
-    public EnemyPatrolState(EnemyStateController stateController, CharacterController enemyMotor) : base(stateController, enemyMotor)
+    public EnemyPatrolState(EnemyStateController stateController, CharacterController enemyMotor, EnemyConfig config) : base(stateController, enemyMotor, config)
     {
     }
 
     public override void SetData<T>(T data)
     {
         this.data = data as IPatrolData;
-    }
-
-    public override void SetConfig<T>(T config)
-    {
-        this.config = config as EnemyConfig;
     }
 
     Vector3 currentDirection;
@@ -47,13 +41,11 @@ public class EnemyPatrolState : EnemyState
             UpdateCurrentVelocity();
         }
 
-        if (Physics.Raycast(data.patroller.position, currentDirection, out RaycastHit hit, config.junctionDetectDistance, data.junctionMask, QueryTriggerInteraction.Collide))
+        if (data.PlayerIsInSight(motor.transform.position, currentDirection, config.junctionDetectDistance, out bool reachJunction))
         {
-            if (JunctionDetectorLocator.Instance.GetJunctionDetector(hit.collider).PlayerIsInSight())
-            {
-                stateController.ChangeState(EnemyStateName.Chase);
-            }
+            stateController.ChangeState(EnemyStateName.Chase);
         }
+        
     }
 
     bool forwardIterating = true;
