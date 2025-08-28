@@ -7,7 +7,7 @@ public class EnemyStateController
 
     Dictionary<EnemyStateName, EnemyState> enemyStates;
 
-    public EnemyStateController(EnemyStateName firstState, EnemyConfig config, CharacterController enemyMotor, EnemyData enemyData)
+    public EnemyStateController(EnemyStateName firstState, EnemyConfig config, CharacterController enemyMotor, EnemyStateData enemyData)
     {
         enemyStates = new()
         {

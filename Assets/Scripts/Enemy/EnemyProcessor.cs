@@ -16,7 +16,7 @@ public class EnemyProcessor : MonoBehaviour
     public void Constructor(JunctionData junctionData, LayerMask junctionMask)
     {
         stateController = new EnemyStateController(EnemyStateName.Patrol, enemyConfig, motor,
-            new EnemyData(patrolRouteParent, junctionData, junctionMask));
+            new EnemyStateData(patrolRouteParent, junctionData, junctionMask));
     }
 
     void Update()

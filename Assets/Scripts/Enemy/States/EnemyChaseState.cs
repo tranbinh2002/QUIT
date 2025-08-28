@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyChaseState : EnemyState
@@ -29,11 +28,10 @@ public class EnemyChaseState : EnemyState
 
     public override void Execute()
     {
-        Vector3 moveDirection = Vector3.Normalize(data.trackChaseRoute[data.trackChaseRoute.Count - 1].transform.position - motor.transform.position);
-        moveDirection.y = 0;
+        Vector3 moveDirection = data.GetDirection(data.trackChaseRoute[data.trackChaseRoute.Count - 1].transform.position, motor.transform.position);
         if (data.PlayerIsInSight(motor.transform.position, moveDirection, config.junctionDetectDistance, out bool reachJunction))
         {
-            motor.SimpleMove(config.moveSpeed * moveDirection);
+            motor.SimpleMove(config.runSpeed * moveDirection);
             TrackRouteOnChasing();
         }
         else if (reachJunction)
@@ -67,6 +65,8 @@ public class EnemyChaseState : EnemyState
 
     public override void Exit()
     {
+        //loại bỏ phần tử cuối vì đang ở vị trí này rồi
+        data.trackChaseRoute.RemoveAt(data.trackChaseRoute.Count - 1);
         trackColliderOnRoute.Clear();
     }
 }

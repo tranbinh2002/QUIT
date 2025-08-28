@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,19 +6,29 @@ public interface IPlayerDetectable
     bool PlayerIsInSight(Vector3 origin, Vector3 direction, float maxDistance, out bool reachJunction);
 }
 
-public interface IPatrolData : IPlayerDetectable
+public interface IDirectionCalculable
+{
+    Vector3 GetDirection(Vector3 target, Vector3 start);
+}
+
+public interface IPatrolData : IPlayerDetectable, IDirectionCalculable
 {
     Vector3[] patrolRoute { get; }
     int currentPositionIndex { get; set; }
 }
 
-public interface IChaseData : IPlayerDetectable
+public interface IChaseData : IPlayerDetectable, IDirectionCalculable
 {
     JunctionData junctionData { get; }
     List<Collider> trackChaseRoute { get; }
 }
 
-public class EnemyData : IPatrolData, IChaseData
+public interface IBackData : IPlayerDetectable, IDirectionCalculable
+{
+    List<Collider> backRoute { get; }
+}
+
+public class EnemyStateData : IPatrolData, IChaseData, IBackData
 {
     Vector3[] patrolPositions;
     LayerMask junctionMask;
@@ -27,7 +36,7 @@ public class EnemyData : IPatrolData, IChaseData
     JunctionData _junctionData;
     List<Collider> trackChasePoints;
 
-    public EnemyData(GameObject patrolRoute, JunctionData junctionData, LayerMask junctionMask)
+    public EnemyStateData(GameObject patrolRoute, JunctionData junctionData, LayerMask junctionMask)
     {
         TakePointsOnRoute(patrolRoute);
         this.junctionMask = junctionMask;
@@ -41,6 +50,15 @@ public class EnemyData : IPatrolData, IChaseData
 
     public JunctionData junctionData => _junctionData;
     public List<Collider> trackChaseRoute => trackChasePoints;
+
+    public List<Collider> backRoute => trackChasePoints;
+
+    public Vector3 GetDirection(Vector3 target, Vector3 start)
+    {
+        Vector3 result = Vector3.Normalize(target - start);
+        result.y = 0;
+        return result;
+    }
 
     public bool PlayerIsInSight(Vector3 origin, Vector3 direction, float maxDistance, out bool reachJunction)
     {

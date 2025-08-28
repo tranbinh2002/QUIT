@@ -26,14 +26,18 @@ public class EnemyPatrolState : EnemyState
     }
     Vector3 CurrentDirection()
     {
-        Vector3 result = Vector3.Normalize(data.patrolRoute[data.currentPositionIndex] - motor.transform.position);
-        result.y = 0;
-        return result;
+        return data.GetDirection(data.patrolRoute[data.currentPositionIndex], motor.transform.position);
     }
 
     public override void Execute()
     {
         motor.SimpleMove(currentVelocity);
+
+        if (data.PlayerIsInSight(motor.transform.position, currentDirection, config.junctionDetectDistance, out bool reachJunction))
+        {
+            stateController.ChangeState(EnemyStateName.Chase);
+        }
+
         Vector3 newDir = CurrentDirection();
         if (Vector3.Dot(newDir, currentDirection) < 0)
         {
@@ -41,11 +45,6 @@ public class EnemyPatrolState : EnemyState
             UpdateCurrentVelocity();
         }
 
-        if (data.PlayerIsInSight(motor.transform.position, currentDirection, config.junctionDetectDistance, out bool reachJunction))
-        {
-            stateController.ChangeState(EnemyStateName.Chase);
-        }
-        
     }
 
     bool forwardIterating = true;
