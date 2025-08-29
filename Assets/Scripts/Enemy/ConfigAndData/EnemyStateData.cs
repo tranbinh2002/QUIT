@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public interface IPlayerDetectable
@@ -77,10 +77,11 @@ public class EnemyStateData : IPatrolData, IChaseData, IBackData
     void TakePointsOnRoute(GameObject route)
     {
         Transform[] points = route.GetComponentsInChildren<Transform>();
-        patrolPositions = new Vector3[points.Length];
-        for (int i = 0; i < points.Length; i++)
+        //loại bỏ phần tử đầu tiên là transform của parent
+        patrolPositions = new Vector3[points.Length - 1];
+        for (int i = 1; i < points.Length; i++)
         {
-            patrolPositions[i] = points[i].position;
+            patrolPositions[i - 1] = points[i].position;
         }
     }
 

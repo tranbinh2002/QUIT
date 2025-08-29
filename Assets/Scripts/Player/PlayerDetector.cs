@@ -3,15 +3,16 @@ using UnityEngine;
 public class PlayerDetector : MonoBehaviour
 {
     [SerializeField]
+    PlayerConfig playerConfig;
+    
     LayerMask junctionMask;
 
     IHaveMoveDirection motor;
     JunctionData junctionData;
-    float junctionDetectDistance;
-    public void Constructor(JunctionData junctionData, float junctionDetectDistance)
+    public void Constructor(JunctionData junctionData, LayerMask junctionMask)
     {
         this.junctionData = junctionData;
-        this.junctionDetectDistance = junctionDetectDistance;
+        this.junctionMask = junctionMask;
     }
 
     void Start()
@@ -21,7 +22,7 @@ public class PlayerDetector : MonoBehaviour
 
     void Update()
     {
-        if (Physics.Raycast(transform.position, motor.direction, out RaycastHit hit, junctionDetectDistance, junctionMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(transform.position, motor.direction, out RaycastHit hit, playerConfig.junctionDetectDistance, junctionMask, QueryTriggerInteraction.Collide))
         {
             junctionData.containPlayerJunction = hit.collider;
         }

@@ -8,20 +8,17 @@ public class EnemyProcessor : MonoBehaviour
     [SerializeField]
     CharacterController motor;
 
-    [SerializeField]
-    GameObject patrolRouteParent;
-
     EnemyStateController stateController;
 
-    public void Constructor(JunctionData junctionData, LayerMask junctionMask)
+    public void Constructor(GameObject patrolRoute, JunctionData junctionData, LayerMask junctionMask)
     {
         stateController = new EnemyStateController(EnemyStateName.Patrol, enemyConfig, motor,
-            new EnemyStateData(patrolRouteParent, junctionData, junctionMask));
+            new EnemyStateData(patrolRoute, junctionData, junctionMask));
     }
 
     void Update()
     {
-        stateController.ExecuteCurrentState();    
+        stateController.ExecuteCurrentState();
     }
 
 }

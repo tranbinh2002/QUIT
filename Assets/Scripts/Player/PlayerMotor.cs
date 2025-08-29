@@ -8,21 +8,17 @@ public interface IHaveMoveDirection
 public class PlayerMotor : MonoBehaviour, IHaveMoveDirection
 {
     [SerializeField]
+    PlayerConfig playerConfig;
+
+    [SerializeField]
     CharacterController controller;
 
     const float GRAVITY = 9.81f;
     bool isJumping;
     int currentJumpDirection = 1; //hướng nhảy hiện tại: nhảy lên
-    float velocity = 5f;
     Vector3 currentMoveDirection;
-    float jumpHeight = 0.5f;
 
     public Vector3 direction => currentMoveDirection;
-
-    public void Constructor(float playerVelocity)
-    {
-        velocity = playerVelocity;
-    }
 
     private void Start()
     {
@@ -43,7 +39,7 @@ public class PlayerMotor : MonoBehaviour, IHaveMoveDirection
         Vector3 motion;
         if (!isJumping)
         {
-            motion = velocity * Time.deltaTime
+            motion = playerConfig.moveSpeed * Time.deltaTime
             * Vector3.Normalize(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
             currentMoveDirection = motion;
             motion.y -= GRAVITY * Time.deltaTime;
@@ -58,7 +54,7 @@ public class PlayerMotor : MonoBehaviour, IHaveMoveDirection
     const float safeValue = 0.005f;
     Vector3 JumpMotion()
     {
-        float h = jumpHeight - transform.position.y;
+        float h = playerConfig.jumpHeight - transform.position.y;
         if (h < safeValue)
         {
             currentJumpDirection = -1;
