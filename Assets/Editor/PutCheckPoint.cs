@@ -27,6 +27,7 @@ public class PutCheckPoint : EditorWindow
             {
                 GameObject createe = new GameObject();
                 createe.transform.position = hit.point;
+                createe.AddComponent<JunctionDetector>();
                 Event.current.Use();
             }
         }

@@ -28,7 +28,7 @@ public class EnemyBackState : EnemyState
         }
 
         Vector3 newDir = CurrentDirection();
-        if (Vector3.Dot(direction, newDir) < 0)
+        if (Vector3.Dot(direction, newDir) <= 0)
         {
             UpdateBackProgress();
         }

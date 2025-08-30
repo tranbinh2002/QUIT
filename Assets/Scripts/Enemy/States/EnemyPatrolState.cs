@@ -39,7 +39,7 @@ public class EnemyPatrolState : EnemyState
         }
 
         Vector3 newDir = CurrentDirection();
-        if (Vector3.Dot(newDir, currentDirection) < 0)
+        if (Vector3.Dot(newDir, currentDirection) <= 0)
         {
             SetNextPositionIndex();
             UpdateCurrentVelocity();

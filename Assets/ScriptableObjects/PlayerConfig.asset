@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c577092675f32c41ab164f23ad2644b, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
-  moveSpeed: 0.5
+  moveSpeed: 0.75
   junctionDetectDistance: 0.25
   jumpHeight: 0.5

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9238bc0fc53c1428d4c1ebb9b20f39, type: 3}
   m_Name: EnemyConfig
   m_EditorClassIdentifier: 
-  moveSpeed: 0.3
+  moveSpeed: 0.5
   junctionDetectDistance: 0.25
-  runSpeed: 0.7
+  runSpeed: 1
